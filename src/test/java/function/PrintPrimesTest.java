@@ -16,34 +16,41 @@ import static org.junit.Assert.assertEquals;
 
 public class PrintPrimesTest {
 
-    private final String leadFile = "lead";
-    private final String goldFile = "src/test/resources/gold";
+    private static final String leadFile = "lead";
+    private static final String goldFile = "src/test/resources/gold";
     private PrintStream out;
+    private BufferedReader lead;
+    private BufferedReader gold;
 
     @Before
     public void
     setUp() throws FileNotFoundException {
         out = System.out;
         System.setOut(new PrintStream(new FileOutputStream(leadFile)));
+        lead = new BufferedReader(new FileReader(leadFile));
+        gold = new BufferedReader(new FileReader(goldFile));
     }
 
     @After
     public void
-    cleanUp() {
+    cleanUp() throws IOException {
         System.setOut(out);
         new File(leadFile).delete();
+
+        if (lead != null) {
+            lead.close();
+        }
+        if (gold != null) {
+            gold.close();
+        }
     }
 
     @Test
     public void
     makeSureMatchesGold() throws IOException {
-        new PrintPrimes().main(new String[0]);
-
-        BufferedReader lead = new BufferedReader(new FileReader(leadFile));
-        BufferedReader gold = new BufferedReader(new FileReader(goldFile));
+        new PrintPrimes().main();
 
         String line;
-
         while ((line = gold.readLine()) != null) {
             assertEquals(line, lead.readLine());
         }
