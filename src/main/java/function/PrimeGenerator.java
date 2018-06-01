@@ -1,8 +1,5 @@
 package function;
 
-/**
- * Created by jinoos on 2018. 6. 1..
- */
 class PrimeGenerator {
     private int candidate;
     private int ord;
